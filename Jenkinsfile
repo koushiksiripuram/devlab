@@ -23,7 +23,7 @@ pipeline{
         withCredentials([
           usernamePassword(credentialsId:'cloud-cred',usernameVariable: USER,passwordVariable: PWD)
         ]){
-          sh "hello ${USER} "
+          sh "hello hello "
         }
       }
     }
