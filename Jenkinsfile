@@ -1,40 +1,41 @@
+pipeline {
+  agent any
 
-pipeline{
-  agent any 
-  environment{
+  parameters {
+    choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: 'Select version to deploy')
+    booleanParam(name: 'executeTests', defaultValue: true, description: 'Run test stage?')
+  }
+
+  environment {
     SERVER_CREDENTIALS = credentials('cloud-cred')
   }
-  parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: '')
-    }
-  stages{
-    stage("build"){
-      
-      steps{
-        echo "build started"
+
+  stages {
+
+    stage("build") {
+      steps {
+        echo "Build started for version ${params.VERSION}"
       }
     }
-    stage("test"){
-      when{
-        expression{
-          params.executeTests
-        }
+
+    stage("test") {
+      when {
+        expression { params.executeTests }
       }
-      
-      steps{
-        echo "build started"
+      steps {
+        echo "Running tests..."
       }
     }
-    stage("deploy"){
-      steps{
-        echo "build started"
-        echo "deploying with ${SERVER_CREDENTIALS}"
-        withCredentials([
-          usernamePassword(credentialsId:'cloud-cred',usernameVariable: USER,passwordVariable: PWD)
-        ]){
-          sh "echo ${USER}"
-        }
+
+    stage("deploy") {
+      steps {
+        echo "Deploying version ${params.VERSION}"
+
+        sh '''
+          echo "Using secured credentials internally"
+          # Example real command (do NOT echo credentials):
+          # scp app.jar ${SERVER_CREDENTIALS_USR}@server:/opt/apps/
+        '''
       }
     }
   }
