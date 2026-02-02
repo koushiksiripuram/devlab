@@ -5,7 +5,7 @@ pipeline{
     stage("build"){
       when{
         expression{
-          BRANCH_NAME == 'master'
+              expression { env.GIT_BRANCH == 'origin/master' || env.GIT_BRANCH == 'master' }
         }
       }
       steps{
