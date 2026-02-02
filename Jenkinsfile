@@ -21,7 +21,7 @@ pipeline{
         echo "build started"
         echo "deploying with ${SERVER_CREDENTIALS}"
         withCredentials([
-          usernamePassword(credentials:'cloud-cred',usernameVariable: USER,passwordVariable: PWD)
+          usernamePassword(credentialsId:'cloud-cred',usernameVariable: USER,passwordVariable: PWD)
         ]){
           sh "some sript $USER "
         }
