@@ -1,3 +1,4 @@
+def gv
 pipeline {
   agent any
 
@@ -11,10 +12,19 @@ pipeline {
   }
 
   stages {
+    stage("init") {
+            steps {
+                script {
+                   gv = load "script.groovy" 
+                }
+            }
+        }
 
     stage("build") {
       steps {
-        echo "Build started for version ${params.VERSION}"
+        script{
+          gv.buildApp()
+        }
       }
     }
 
@@ -23,13 +33,17 @@ pipeline {
         expression { params.executeTests }
       }
       steps {
-        echo "Running tests..."
+        script{
+          gv.testApp()
+        }
       }
     }
 
     stage("deploy") {
       steps {
-        echo "Deploying version ${params.VERSION}"
+        script{
+          gv.testApp()
+        }
 
         sh '''
           echo "Using secured credentials internally"
