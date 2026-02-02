@@ -1,13 +1,12 @@
 
 pipeline{
   agent any 
+  environment{
+    SERVER_CREDENTIALS = credentials('cloud-cred')
+  }
   stages{
     stage("build"){
-      when{
-        expression{
-              expression { env.GIT_BRANCH == 'origin/master' || env.GIT_BRANCH == 'master' }
-        }
-      }
+      
       steps{
         echo "build started"
       }
@@ -20,6 +19,12 @@ pipeline{
     stage("deploy"){
       steps{
         echo "build started"
+        echo "deploying with ${SERVER_CREDENTIALS}"
+        withCredentials([
+          usernamePassword(credentials:'cloud-cred',usernameVariable: USER,passwordVariable: PWD)
+        ]){
+          sh "some sript ${USER} ${PWD}"
+        }
       }
     }
   }
