@@ -9,6 +9,7 @@ pipeline {
 
   environment {
     SERVER_CREDENTIALS = credentials('cloud-cred')
+    SERVER_CREDENTIALS_USR = credentials('just-cred-usr')
   }
 
   stages {
